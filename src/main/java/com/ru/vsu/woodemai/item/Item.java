@@ -1,20 +1,15 @@
 package com.ru.vsu.woodemai.item;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import com.ru.vsu.woodemai.category.Category;
+import com.ru.vsu.woodemai.delivery.Delivery;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Item {
 
     @Id
@@ -30,6 +25,12 @@ public class Item {
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date expirationDate;
     private String storageCondition;
+
+    @ManyToOne
+    private Category category;
+
+    @ManyToOne
+    private Delivery delivery;
 
     private double weight;
     private double price;

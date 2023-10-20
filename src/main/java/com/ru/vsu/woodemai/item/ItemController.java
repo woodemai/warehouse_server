@@ -23,7 +23,6 @@ public class ItemController {
         return repository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));
     }
-    @CrossOrigin(origins = "http://localhost:5173/")
     @PostMapping
     Item createItem(@RequestBody Item item) {
         return repository.save(item);
