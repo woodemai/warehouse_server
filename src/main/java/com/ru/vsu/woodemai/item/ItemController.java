@@ -1,5 +1,7 @@
 package com.ru.vsu.woodemai.item;
 
+import com.ru.vsu.woodemai.category.Category;
+import com.ru.vsu.woodemai.category.CategoryRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -8,9 +10,11 @@ import java.util.List;
 @RequestMapping("/item")
 public class ItemController {
     private final ItemRepository repository;
+    private final CategoryRepository categoryRepository;
 
-    public ItemController(ItemRepository repository) {
+    public ItemController(ItemRepository repository, CategoryRepository categoryRepository) {
         this.repository = repository;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping
@@ -24,7 +28,20 @@ public class ItemController {
                 .orElseThrow(() -> new ItemNotFoundException(id));
     }
     @PostMapping
-    Item createItem(@RequestBody Item item) {
+    Item createItem(@RequestBody ItemCreateRequest request) {
+        Category category = categoryRepository.findById(request.getCategory()).orElseThrow(() -> new ItemNotFoundException(request.getCategory()));
+        Item item = new Item(request.getId(),
+                request.getName(),
+                request.getDescription(),
+                request.getManufacturer(),
+                request.getProductionDate(),
+                request.getExpirationDate(),
+                request.getStorageCondition(),
+                category,
+                null,
+                request.getWeight(),
+                request.getPrice()
+        );
         return repository.save(item);
     }
 

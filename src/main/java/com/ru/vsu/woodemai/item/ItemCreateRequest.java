@@ -3,22 +3,13 @@ package com.ru.vsu.woodemai.item;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ru.vsu.woodemai.category.Category;
 import com.ru.vsu.woodemai.delivery.Delivery;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 
-@Entity
 @Data
-@AllArgsConstructor
-@RequiredArgsConstructor
-public class Item {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-
+public class ItemCreateRequest {
     private String id;
     private String name;
     private String description;
@@ -30,13 +21,8 @@ public class Item {
     private Date expirationDate;
     private String storageCondition;
 
-    @ManyToOne
-    private Category category;
-
-    @ManyToOne
-    private Delivery delivery;
+    private String category;
 
     private double weight;
     private double price;
 }
-
