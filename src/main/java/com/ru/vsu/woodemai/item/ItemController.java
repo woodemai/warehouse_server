@@ -2,6 +2,8 @@ package com.ru.vsu.woodemai.item;
 
 import com.ru.vsu.woodemai.category.Category;
 import com.ru.vsu.woodemai.category.CategoryRepository;
+import com.ru.vsu.woodemai.supplier.Supplier;
+import com.ru.vsu.woodemai.supplier.SupplierRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,10 +13,12 @@ import java.util.List;
 public class ItemController {
     private final ItemRepository repository;
     private final CategoryRepository categoryRepository;
+    private final SupplierRepository supplierRepository;
 
-    public ItemController(ItemRepository repository, CategoryRepository categoryRepository) {
+    public ItemController(ItemRepository repository, CategoryRepository categoryRepository, SupplierRepository supplierRepository) {
         this.repository = repository;
         this.categoryRepository = categoryRepository;
+        this.supplierRepository = supplierRepository;
     }
 
     @GetMapping
@@ -30,13 +34,14 @@ public class ItemController {
     @PostMapping
     Item createItem(@RequestBody ItemCreateRequest request) {
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(() -> new ItemNotFoundException(request.getCategory()));
+        Supplier supplier = supplierRepository.findById(request.getSupplier()).orElseThrow(() -> new ItemNotFoundException(request.getSupplier()));
         Item item = new Item(request.getId(),
                 request.getName(),
                 request.getDescription(),
-                request.getManufacturer(),
                 request.getProductionDate(),
                 request.getExpirationDate(),
                 request.getStorageCondition(),
+                supplier,
                 category,
                 null,
                 request.getWeight(),
@@ -56,7 +61,6 @@ public class ItemController {
                 .map(item -> {
                     item.setName(updatedItem.getName());
                     item.setDescription(updatedItem.getDescription());
-                    item.setManufacturer(updatedItem.getManufacturer());
                     item.setProductionDate(updatedItem.getProductionDate());
                     item.setExpirationDate(updatedItem.getExpirationDate());
                     item.setStorageCondition(updatedItem.getStorageCondition());

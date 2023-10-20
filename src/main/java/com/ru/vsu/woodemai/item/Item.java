@@ -3,6 +3,7 @@ package com.ru.vsu.woodemai.item;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ru.vsu.woodemai.category.Category;
 import com.ru.vsu.woodemai.delivery.Delivery;
+import com.ru.vsu.woodemai.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,13 +23,15 @@ public class Item {
     private String id;
     private String name;
     private String description;
-    private String manufacturer;
 
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date productionDate;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private Date expirationDate;
     private String storageCondition;
+
+    @ManyToOne
+    private Supplier supplier;
 
     @ManyToOne
     private Category category;
