@@ -1,20 +1,17 @@
 package com.ru.vsu.woodemai.supplier;
 
 import com.ru.vsu.woodemai.item.ItemNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/suppliers")
+@RequiredArgsConstructor
 public class SupplierController {
 
     private final SupplierRepository repository;
-
-    public SupplierController(SupplierRepository repository) {
-        this.repository = repository;
-    }
-
     @GetMapping
     List<Supplier> getAll() {
         return repository.findAll();

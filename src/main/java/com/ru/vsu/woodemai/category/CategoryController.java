@@ -1,18 +1,17 @@
 package com.ru.vsu.woodemai.category;
 
 import com.ru.vsu.woodemai.item.ItemNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
+@RequiredArgsConstructor
 public class CategoryController {
     private final CategoryRepository repository;
 
-    public CategoryController(CategoryRepository repository) {
-        this.repository = repository;
-    }
     @GetMapping
     List<Category> getAll(){return repository.findAll();}
 

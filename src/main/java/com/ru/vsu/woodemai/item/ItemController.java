@@ -4,32 +4,31 @@ import com.ru.vsu.woodemai.category.Category;
 import com.ru.vsu.woodemai.category.CategoryRepository;
 import com.ru.vsu.woodemai.supplier.Supplier;
 import com.ru.vsu.woodemai.supplier.SupplierRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/api/v1/items")
+@RequiredArgsConstructor
 public class ItemController {
     private final ItemRepository repository;
     private final CategoryRepository categoryRepository;
     private final SupplierRepository supplierRepository;
 
-    public ItemController(ItemRepository repository, CategoryRepository categoryRepository, SupplierRepository supplierRepository) {
-        this.repository = repository;
-        this.categoryRepository = categoryRepository;
-        this.supplierRepository = supplierRepository;
-    }
 
     @GetMapping
-    List<Item> getAll() {
-        return repository.findAll();
+    ResponseEntity<List<Item>> getAll() {
+        return ResponseEntity.ok(repository.findAll());
     }
 
     @GetMapping("/{id}")
-    Item getItemById(@PathVariable String id) {
-        return repository.findById(id)
+    ResponseEntity<Item> getItemById(@PathVariable String id) {
+        Item item = repository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException(id));
+        return ResponseEntity.ok(item);
     }
     @PostMapping
     Item createItem(@RequestBody ItemCreateRequest request) {
