@@ -1,4 +1,6 @@
 spring:
+  mvc:
+    log-request-details: true
   jpa:
     database: POSTGRESQL
     show-sql: true
@@ -13,3 +15,6 @@ spring:
     password: "wooDe.73/db/"
   database:
     driverClassName: org.Postgresql.Driver
+logging:
+  level:
+    web: "DEBUG"

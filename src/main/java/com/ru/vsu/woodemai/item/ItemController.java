@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/items")
+@RequestMapping("/api/v1/auth/items")
 @RequiredArgsConstructor
 public class ItemController {
     private final ItemRepository repository;
@@ -30,8 +30,9 @@ public class ItemController {
                 .orElseThrow(() -> new ItemNotFoundException(id));
         return ResponseEntity.ok(item);
     }
+
     @PostMapping
-    Item createItem(@RequestBody ItemCreateRequest request) {
+    Item createItem(@RequestBody ItemRequest request) {
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(() -> new ItemNotFoundException(request.getCategory()));
         Supplier supplier = supplierRepository.findById(request.getSupplier()).orElseThrow(() -> new ItemNotFoundException(request.getSupplier()));
         Item item = new Item(request.getId(),
@@ -55,20 +56,34 @@ public class ItemController {
     }
 
     @PutMapping("/{id}")
-    Item updateItem(@RequestBody Item updatedItem, @PathVariable String id) {
+    Item updateItem(@RequestBody ItemRequest request, @PathVariable String id) {
+        Supplier supplier = supplierRepository.findById(request.getSupplier()).orElseThrow();
+        Category category = categoryRepository.findById(request.getCategory()).orElseThrow();
         return repository.findById(id)
                 .map(item -> {
-                    item.setName(updatedItem.getName());
-                    item.setDescription(updatedItem.getDescription());
-                    item.setProductionDate(updatedItem.getProductionDate());
-                    item.setExpirationDate(updatedItem.getExpirationDate());
-                    item.setStorageCondition(updatedItem.getStorageCondition());
-                    item.setWeight(updatedItem.getWeight());
-                    item.setPrice(updatedItem.getPrice());
+                    item.setName(request.getName());
+                    item.setDescription(request.getDescription());
+                    item.setProductionDate(request.getProductionDate());
+                    item.setExpirationDate(request.getExpirationDate());
+                    item.setStorageCondition(request.getStorageCondition());
+                    item.setWeight(request.getWeight());
+                    item.setPrice(request.getPrice());
+                    item.setCategory(category);
+                    item.setSupplier(supplier);
                     return repository.save(item);
                 }).orElseGet(() -> {
-                    updatedItem.setId(id);
-                    return repository.save(updatedItem);
+                    request.setId(id);
+                    return repository.save(new Item(id,
+                            request.getName(),
+                            request.getDescription(),
+                            request.getProductionDate(),
+                            request.getExpirationDate(),
+                            request.getStorageCondition(),
+                            supplier,
+                            category,
+                            null,
+                            request.getWeight(),
+                            request.getPrice()));
                 });
     }
 }

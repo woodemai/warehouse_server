@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class ItemCreateRequest {
+public class ItemRequest {
     private String id;
     private String name;
     private String description;

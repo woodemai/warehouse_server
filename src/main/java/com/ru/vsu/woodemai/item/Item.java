@@ -24,9 +24,9 @@ public class Item {
     private String name;
     private String description;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date productionDate;
-    @JsonFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date expirationDate;
     private String storageCondition;
 
