@@ -13,4 +13,10 @@ public class CategoryDto {
 
     private String name;
     private String description;
+
+    public CategoryDto(Category category) {
+        this.id = category.getId();
+        this.name = category.getName();
+        this.description = category.getDescription();
+    }
 }

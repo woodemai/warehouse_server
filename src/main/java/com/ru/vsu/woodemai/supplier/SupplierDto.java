@@ -10,5 +10,11 @@ import lombok.NoArgsConstructor;
 public class SupplierDto {
     private String id;
     private String name;
-    private String inn;
+    private Long inn;
+
+    public SupplierDto(Supplier supplier) {
+        this.id = supplier.getId();
+        this.name = supplier.getName();
+        this.inn = supplier.getInn();
+    }
 }

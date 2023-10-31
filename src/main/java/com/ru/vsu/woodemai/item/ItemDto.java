@@ -31,4 +31,16 @@ public class ItemDto {
 
     private double weight;
     private double price;
+
+    public ItemDto(Item item) {
+        this.id = item.getId();
+        this.name = item.getName();
+        this.description = item.getDescription();
+        this.productionDate = item.getProductionDate();
+        this.expirationDate = item.getExpirationDate();
+        this.storageCondition = item.getStorageCondition();
+        this.supplierId = item.getSupplier().getId();
+        this.weight = item.getWeight();
+        this.price = item.getPrice();
+    }
 }

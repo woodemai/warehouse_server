@@ -1,45 +1,41 @@
 package com.ru.vsu.woodemai.category;
 
-import com.ru.vsu.woodemai.item.ItemNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/api/v1/categories")
 @RequiredArgsConstructor
 public class CategoryController {
-    private final CategoryRepository repository;
+
+
+    private final CategoryService service;
 
     @GetMapping
-    List<Category> getAll(){return repository.findAll();}
+    ResponseEntity<List<CategoryDto>> getAll() {
+        return ResponseEntity.ok(service.getAll());
+    }
 
     @GetMapping("/{id}")
-    Category getById(@PathVariable String id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException(id));
+    ResponseEntity<CategoryDto> getById(@PathVariable String id) {
+        return ResponseEntity.ok(service.getById(id));
     }
+
     @PostMapping
-    Category create(@RequestBody Category category) {
-        return repository.save(category);
+    ResponseEntity<CategoryDto> create(@RequestBody CategoryDto dto) {
+        return ResponseEntity.ok(service.create(dto));
     }
 
     @DeleteMapping("/{id}")
     void delete(@PathVariable String id) {
-        repository.deleteById(id);
+        service.deleteById(id);
     }
 
     @PutMapping("/{id}")
-    Category update(@RequestBody Category updatedCategory, @PathVariable String id) {
-        return repository.findById(id)
-                .map(category -> {
-                    category.setName(updatedCategory.getName());
-                    category.setDescription(updatedCategory.getName());
-                    return repository.save(category);
-                }).orElseGet(() -> {
-                    updatedCategory.setId(id);
-                    return repository.save(updatedCategory);
-                });
+    ResponseEntity<CategoryDto> update(@RequestBody CategoryDto dto, @PathVariable String id) {
+        return ResponseEntity.ok(service.update(dto, id));
     }
 }

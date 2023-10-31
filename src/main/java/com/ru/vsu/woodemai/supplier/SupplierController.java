@@ -1,47 +1,38 @@
 package com.ru.vsu.woodemai.supplier;
 
-import com.ru.vsu.woodemai.item.ItemNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/suppliers")
+@RequestMapping("/api/v1/suppliers")
 @RequiredArgsConstructor
 public class SupplierController {
 
-    private final SupplierRepository repository;
+    private final SupplierService service;
     @GetMapping
-    List<Supplier> getAll() {
-        return repository.findAll();
+    ResponseEntity<List<SupplierDto>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/{id}")
-    Supplier getItemById(@PathVariable String id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ItemNotFoundException(id));
+    ResponseEntity<SupplierDto> getItemById(@PathVariable String id) {
+        return ResponseEntity.ok(service.getById(id));
     }
     @PostMapping
-    Supplier create(@RequestBody Supplier supplier) {
-        return repository.save(supplier);
+    ResponseEntity<SupplierDto> create(@RequestBody SupplierDto dto) {
+        return ResponseEntity.ok(service.create(dto));
     }
 
     @DeleteMapping("/{id}")
     void delete(@PathVariable String id) {
-        repository.deleteById(id);
+        service.delete(id);
     }
 
     @PutMapping("/{id}")
-    Supplier update(@RequestBody Supplier updatedSupplier, @PathVariable String id) {
-        return repository.findById(id)
-                .map(supplier -> {
-                    supplier.setName(updatedSupplier.getName());
-                    supplier.setInn(updatedSupplier.getInn());
-                    return repository.save(supplier);
-                }).orElseGet(() -> {
-                    updatedSupplier.setId(id);
-                    return repository.save(updatedSupplier);
-                });
+    ResponseEntity<SupplierDto> update(@RequestBody SupplierDto dto, @PathVariable String id) {
+        return ResponseEntity.ok(service.update(dto, id));
     }
 }

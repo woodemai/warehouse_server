@@ -7,14 +7,14 @@ import com.ru.vsu.woodemai.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Entity
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class Item {
 
     @Id
@@ -41,5 +41,17 @@ public class Item {
 
     private double weight;
     private double price;
+
+    public Item(ItemDto dto, Supplier supplier, Category category) {
+        this.name = dto.getName();
+        this.description = dto.getDescription();
+        this.productionDate = dto.getProductionDate();
+        this.expirationDate = dto.getExpirationDate();
+        this.storageCondition = dto.getStorageCondition();
+        this.weight = dto.getWeight();
+        this.price = dto.getPrice();
+        this.supplier = supplier;
+        this.category = category;
+    }
 }
 
