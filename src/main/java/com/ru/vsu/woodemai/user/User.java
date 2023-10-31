@@ -1,5 +1,6 @@
 package com.ru.vsu.woodemai.user;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,27 +9,32 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
+@Builder
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String username;
     private String email;
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserType role;
+    private Role role;
+
+    public User(UserDto dto) {
+        id = dto.getId();
+        email = dto.getEmail();
+        role = Role.valueOf(dto.getRole());
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -36,13 +42,8 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
     public String getUsername() {
-        return username ;
+        return email;
     }
 
     @Override

@@ -1,20 +1,17 @@
 package com.ru.vsu.woodemai.delivery;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ru.vsu.woodemai.buyer.Buyer;
-import com.ru.vsu.woodemai.item.Item;
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
-@Entity
 @Data
-public class Delivery {
+@AllArgsConstructor
+@NoArgsConstructor
+public class DeliveryDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String addressFrom;
@@ -26,8 +23,5 @@ public class Delivery {
     private String status;
     private int progress;
 
-    @OneToOne
-    private Buyer buyer;
-    @OneToMany
-    private List<Item> items;
+    private String buyerId;
 }

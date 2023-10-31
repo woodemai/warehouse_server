@@ -1,20 +1,16 @@
 package com.ru.vsu.woodemai.shipment;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ru.vsu.woodemai.item.Item;
-import com.ru.vsu.woodemai.supplier.Supplier;
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
 
-@Entity
 @Data
-public class Shipment {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+@AllArgsConstructor
+@NoArgsConstructor
+public class ShipmentDto {
     private String id;
 
     private String addressFrom;
@@ -23,9 +19,5 @@ public class Shipment {
     private Date dateFrom;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date dateTo;
-
-    @OneToOne
-    private Supplier supplier;
-    @OneToMany
-    private List<Item> items;
+    private String supplierId;
 }

@@ -1,16 +1,16 @@
-package com.ru.vsu.woodemai.security.auth;
+package com.ru.vsu.woodemai.user;
+
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-    private String username;
+@NoArgsConstructor
+public class UserDto {
+    private String id;
     private String email;
     private String password;
+    private String role;
 }
