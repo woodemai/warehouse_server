@@ -9,7 +9,7 @@
 		<relativePath/>
 	</parent>
 	<groupId>com.ru.vsu</groupId>
-	<artifactId>woodemai</artifactId>
+	<artifactId>warehouse_server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>warehouse</name>
 	<description>Warehouse backend</description>
