@@ -2,8 +2,6 @@ package com.ru.vsu.woodemai.item;
 
 import com.ru.vsu.woodemai.category.Category;
 import com.ru.vsu.woodemai.category.CategoryService;
-import com.ru.vsu.woodemai.delivery.Delivery;
-import com.ru.vsu.woodemai.delivery.DeliveryService;
 import com.ru.vsu.woodemai.supplier.Supplier;
 import com.ru.vsu.woodemai.supplier.SupplierService;
 import jakarta.persistence.EntityNotFoundException;
@@ -18,7 +16,6 @@ public class ItemService {
 
     private final ItemRepository repository;
     private final SupplierService supplierService;
-    private final DeliveryService deliveryService;
     private final CategoryService categoryService;
 
     private static String getNotFoundMessage(String id) {
@@ -56,7 +53,6 @@ public class ItemService {
 
     public ItemDto updateItem(ItemDto dto, String id) {
         Supplier supplier = supplierService.getSupplierById(dto.getSupplierId());
-        Delivery delivery = deliveryService.getById(dto.getDeliveryId());
         Category category = categoryService.getCategoryById(dto.getCategoryId());
         Item updatedItem = repository.findById(id).map(
                 item -> {
@@ -67,7 +63,6 @@ public class ItemService {
                     item.setStorageCondition(dto.getStorageCondition());
                     item.setWeight(dto.getWeight());
                     item.setPrice(dto.getPrice());
-                    item.setDelivery(delivery);
                     item.setCategory(category);
                     item.setSupplier(supplier);
                     return repository.save(item);

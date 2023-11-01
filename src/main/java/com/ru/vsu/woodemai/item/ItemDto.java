@@ -39,8 +39,9 @@ public class ItemDto {
         this.productionDate = item.getProductionDate();
         this.expirationDate = item.getExpirationDate();
         this.storageCondition = item.getStorageCondition();
-        this.supplierId = item.getSupplier().getId();
         this.weight = item.getWeight();
         this.price = item.getPrice();
+        this.supplierId = item.getSupplier().getId();
+        this.categoryId = item.getCategory().getId();
     }
 }
