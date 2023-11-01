@@ -1,10 +1,13 @@
 package com.ru.vsu.woodemai.token;
 
+import com.ru.vsu.woodemai.user.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -13,12 +16,14 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
 public class TokenService {
     private static final String SECRET_KEY = "PuRYMpxdC09jCutRDyY5FdGUU1yBEPoBmHQ+hIq+K61Fq5eO+kI2W2ehW63WngaeucauZ4GjgxbsS1lQz7qY/gAmoN0VUE+/DMc1A/3H2ia1HTZwuXy74ZrmKTft0mXBW58HT9clbaPNTlhpt6wEJFaXHHUX1GzM+cVhwoOoG0cXE+heEBhbM+YU0/grYSZPQE3j7ZolRBeBS8p/V3ZPaPjxQ/vSdZUMEmDHLi3Z1KJk0BC+iZL3wtZYJWMig8cYBczE2xsVGewUXC8rXzqq23NwWeqAsur04oDhxVLwmzu/LVX2jDkGnl6QbPeXDT+btDpM5iveDs9QCSQHOPmn6MQwd1iI74ruD0OXU97lJ0hr52MC6f+NKcQJKK30FQWz0Yjrmmx3wjJM9tIHL7csDrzqFQUYo44da8qgTraAoafZu05tDC0IM9lnq04zwDoTMs3M8HJw2cbwKucfiM1B/N4xw2Zu1KsfXr2/8hAW1RGGQHfiGvguqOwdTHcVxxVcPPk4jjUjjNUARFr1EYXMrpjeHbrtTUCePd16UKxJODjusG1HBe+rVN2GMZhzd0AFFUy6Gzk2j1n7QPtGOZ+O2C8fP6fRp2kpIjAbu5ngRiASJyimcQHNkPJSCBG35xZtUPI7Ltz6YcqNQaLv5i9uIBEoXK6EeemPERl5xkzNimV8mhlVTF9B60czeMH6FhGy";
+    private final TokenRepository repository;
 
     private String generateToken(UserDetails userDetails, long expiration) {
         return generateToken(new HashMap<>(), userDetails, expiration);
@@ -75,5 +80,29 @@ public class TokenService {
 
     private Date extractExpiration(String token) {
         return getClaim(token, Claims::getExpiration);
+    }
+
+    public void checkEquals(String token) {
+        Token dbToken = repository.getByRefreshToken(token)
+                .orElseThrow(() -> new EntityNotFoundException("Token not found"));
+        if (!dbToken.getRefreshToken().equals(token)) {
+            throw new EntityExistsException("Tokens are not equal");
+        }
+    }
+
+    public void setTokenToRepository(String refreshToken, User user) {
+        Optional<Token> optToken = repository.getByUser(user);
+        if (optToken.isPresent()) {
+            Token token = optToken.get();
+            token.setRefreshToken(refreshToken);
+            repository.save(token);
+        } else {
+            repository.save(new Token(user, refreshToken));
+        }
+    }
+
+    public void deleteToken(String token) {
+        repository.delete(repository.getByRefreshToken(token)
+                .orElseThrow(() -> new EntityNotFoundException("Token not found")));
     }
 }

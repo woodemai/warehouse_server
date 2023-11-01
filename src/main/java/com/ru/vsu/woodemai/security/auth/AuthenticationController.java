@@ -14,21 +14,21 @@ public class AuthenticationController {
 
     @PostMapping("/registration")
     public ResponseEntity<AuthenticationResponse> registration(@RequestBody RegisterRequest request, HttpServletResponse httpServletResponse) {
-        return service.register(request, httpServletResponse);
+        return ResponseEntity.ok(service.registration(request, httpServletResponse));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request, HttpServletResponse httpServletResponse) {
-        return service.authenticate(request, httpServletResponse);
+        return ResponseEntity.ok(service.login(request, httpServletResponse));
     }
 
     @GetMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refresh(@CookieValue("refreshToken") String refreshToken, HttpServletResponse httpServletResponse) {
-        return service.refresh(refreshToken, httpServletResponse);
+        return ResponseEntity.ok(service.refresh(refreshToken, httpServletResponse));
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity<Void> logout(@CookieValue("refreshToken") String refreshToken) {
-        return service.logout(refreshToken);
+    public void logout(@CookieValue("refreshToken") String refreshToken) {
+        service.logout(refreshToken);
     }
 }
