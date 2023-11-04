@@ -1,13 +1,12 @@
 spring:
-  mvc:
-    log-request-details: true
+  profiles:
+    active: production
   jpa:
     database: POSTGRESQL
     show-sql: true
-    hibernate.ddl-auto: update
-    properties:
-      hibernate:
-        "globally_quoted_identifiers": "true"
+    hibernate:
+      properties:
+        hibernate.globally_quoted_identifiers: true
   datasource:
     platform: postgres
     url: "jdbc:postgresql://db.tdcsekngtbleusetglnt.supabase.co:5432/postgres?user=postgres&password=wooDe.73/db/"
@@ -15,6 +14,30 @@ spring:
     password: "wooDe.73/db/"
   database:
     driverClassName: org.Postgresql.Driver
+---
+spring:
+  devtools:
+    add-properties: true
+  config:
+    activate:
+      on-profile: development
+  mvc:
+    log-request-details: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  security:
+    debug: true
 logging:
   level:
-    web: "DEBUG"
+    web: DEBUG
+---
+spring:
+  devtools:
+    add-properties: false
+  config:
+    activate:
+      on-profile: production
+  jpa:
+    hibernate:
+      ddl-auto: update

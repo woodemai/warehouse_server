@@ -27,14 +27,24 @@ public class UserService {
 
     public User setUser(RegisterRequest request) {
         Optional<User> optUser = repository.getByEmail(request.getEmail());
+        Role role = extractRole(request.getRole());
         if (optUser.isPresent()) {
             throw new EntityExistsException("User with email: " + request.getEmail() + " already exists");
         }
         var user = User.builder()
                 .email(request.getEmail())
                 .password(encoder.encode(request.getPassword()))
-                .role(Role.CLIENT)
+                .role(role)
                 .build();
         return repository.save(user);
+    }
+
+    private Role extractRole(String role) {
+        return switch (role) {
+            case "Сотрудник" -> Role.EMPLOYEE;
+            case "Поставщик" -> Role.SUPPLIER;
+            case "Покупатель" -> Role.BUYER;
+            default -> throw new EntityNotFoundException("Role " + role + "not found");
+        };
     }
 }
