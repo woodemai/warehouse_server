@@ -1,6 +1,8 @@
 package com.ru.vsu.woodemai.item;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ru.vsu.woodemai.category.CategoryDto;
+import com.ru.vsu.woodemai.supplier.SupplierDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,16 +25,16 @@ public class ItemDto {
     private Date expirationDate;
     private String storageCondition;
 
-    private String supplierId;
+    private SupplierDto supplier;
 
-    private String categoryId;
+    private CategoryDto category;
 
     private String deliveryId;
 
     private double weight;
     private double price;
 
-    public ItemDto(Item item) {
+    public ItemDto(Item item, SupplierDto supplier, CategoryDto category) {
         this.id = item.getId();
         this.name = item.getName();
         this.description = item.getDescription();
@@ -41,7 +43,7 @@ public class ItemDto {
         this.storageCondition = item.getStorageCondition();
         this.weight = item.getWeight();
         this.price = item.getPrice();
-        this.supplierId = item.getSupplier().getId();
-        this.categoryId = item.getCategory().getId();
+        this.supplier = supplier;
+        this.category = category;
     }
 }

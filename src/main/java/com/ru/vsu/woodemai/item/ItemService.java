@@ -1,8 +1,10 @@
 package com.ru.vsu.woodemai.item;
 
 import com.ru.vsu.woodemai.category.Category;
+import com.ru.vsu.woodemai.category.CategoryDto;
 import com.ru.vsu.woodemai.category.CategoryService;
 import com.ru.vsu.woodemai.supplier.Supplier;
+import com.ru.vsu.woodemai.supplier.SupplierDto;
 import com.ru.vsu.woodemai.supplier.SupplierService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -33,8 +35,8 @@ public class ItemService {
     }
 
     public ItemDto create(ItemDto dto) {
-        Supplier supplier = supplierService.getSupplierById(dto.getSupplierId());
-        Category category = categoryService.getCategoryById(dto.getCategoryId());
+        Supplier supplier = supplierService.getSupplierById(dto.getSupplier().getId());
+        Category category = categoryService.getCategoryById(dto.getCategory().getId());
         Item item = createItem(dto, supplier, category);
         return convertToDto(repository.save(item));
     }
@@ -44,7 +46,9 @@ public class ItemService {
     }
 
     private ItemDto convertToDto(Item item) {
-        return new ItemDto(item);
+        SupplierDto supplier = new SupplierDto(supplierService.getSupplierById(item.getSupplier().getId()));
+        CategoryDto category = new CategoryDto(categoryService.getCategoryById(item.getCategory().getId()));
+        return new ItemDto(item, supplier, category);
     }
 
     public void deleteById(String id) {
@@ -52,8 +56,8 @@ public class ItemService {
     }
 
     public ItemDto updateItem(ItemDto dto, String id) {
-        Supplier supplier = supplierService.getSupplierById(dto.getSupplierId());
-        Category category = categoryService.getCategoryById(dto.getCategoryId());
+        Supplier supplier = supplierService.getSupplierById(dto.getSupplier().getId());
+        Category category = categoryService.getCategoryById(dto.getCategory().getId());
         Item updatedItem = repository.findById(id).map(
                 item -> {
                     item.setName(dto.getName());
