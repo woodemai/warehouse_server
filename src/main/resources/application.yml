@@ -11,6 +11,8 @@ spring:
     url: jdbc:postgresql://db.gsdobiixvucbmezmvurh.supabase.co:5432/postgres?user=postgres&password=wooDe.73warehouse
     username: postgres
     password: wooDe.73warehouse
+client:
+  url: http://0.0.0.0
 ---
 spring:
   config:
