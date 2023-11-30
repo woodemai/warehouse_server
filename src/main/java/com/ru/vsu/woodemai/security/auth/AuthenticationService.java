@@ -59,9 +59,13 @@ public class AuthenticationService {
 
 
     private void setTokenToCookie(HttpServletResponse response, String token) {
-        Cookie cookie = new Cookie("refreshToken", token);
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
+        try {
+            Cookie cookie = new Cookie("refreshToken", token);
+            cookie.setHttpOnly(true);
+            response.addCookie(cookie);
+        }catch (Exception e) {
+            throw new RuntimeException("Setting cookie exception");
+        }
     }
 
     private AuthenticationResponse buildResponse(String refreshToken, String accessToken, User user) {

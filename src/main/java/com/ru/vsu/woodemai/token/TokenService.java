@@ -91,13 +91,17 @@ public class TokenService {
     }
 
     public void setTokenToRepository(String refreshToken, User user) {
-        Optional<Token> optToken = repository.getByUser(user);
-        if (optToken.isPresent()) {
-            Token token = optToken.get();
-            token.setRefreshToken(refreshToken);
-            repository.save(token);
-        } else {
-            repository.save(new Token(user, refreshToken));
+        try {
+            Optional<Token> optToken = repository.getByUser(user);
+            if (optToken.isPresent()) {
+                Token token = optToken.get();
+                token.setRefreshToken(refreshToken);
+                repository.save(token);
+            } else {
+                repository.save(new Token(user, refreshToken));
+            }
+        }catch (Exception e) {
+            throw new RuntimeException("Token setting exception");
         }
     }
 
